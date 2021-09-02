@@ -1,7 +1,17 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+import React from "react";
+import { ApolloProvider } from "@apollo/client";
+import client from "../apollo-client";
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
-}
-export default MyApp
+import "tailwindcss/tailwind.css";
+import "../styles/globals.css";
+import "@sonic-web-dev/core";
+
+const MyApp = ({ Component, pageProps }) => {
+  return (
+    <ApolloProvider client={client}>
+      <Component {...pageProps} />
+    </ApolloProvider>
+  );
+};
+
+export default MyApp;
