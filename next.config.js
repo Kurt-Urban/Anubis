@@ -1,13 +1,3 @@
-// /** @type {import('next').NextConfig} */
-// module.exports = {
-//   reactStrictMode: true,
-//   images: {
-//     domains: [""],
-//   },
-// };
-
-const path = require("path");
-
 const withTM = require("next-transpile-modules")([
   "@sonic-web-dev/core",
   "@sonic-web-dev/form",
@@ -17,8 +7,8 @@ const withTM = require("next-transpile-modules")([
   "@sonic-web-dev/date",
 ]);
 
-const ENV = process.env.ENV || "dev";
-const pathToConfigs = path.join(__dirname, `/configs/${ENV}.config.js`);
+// const ENV = process.env.ENV || "dev";
+// const pathToConfigs = path.join(__dirname, `/configs/${ENV}.config.js`);
 
-module.exports = require(pathToConfigs);
+// module.exports = require(pathToConfigs);
 module.exports = withTM();
