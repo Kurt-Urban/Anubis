@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import TopNav from "./components/daisyUI/TopNav";
+
+import TopNav from "./components/TopNav/TopNav";
 
 const Home = ({}) => {
   return (
