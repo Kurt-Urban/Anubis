@@ -5,21 +5,18 @@ import { Button } from "@sonic-web-dev/core";
 import { FaBars } from "react-icons/fa";
 import { useUser } from "../../../hooks";
 import GoogleAuth from "../utils/GoogleAuth";
-import GoogleLogout from "../utils/GoogleLogout";
 
 const TopNavSettings = ({}) => {
   const {
     user: { firstName, email },
-    setGoogleUser,
+    user,
   } = useUser();
 
-  const logout = (e) => {
-    console.log(e);
-  };
+  console.log(user);
 
   return (
     <>
-      <div className="dropdown dropdown-end dropdown-open float-right">
+      <div className="dropdown dropdown-end float-right">
         <div tabIndex={0} className="m-1 text-lg btn btn-ghost">
           <FaBars />
         </div>

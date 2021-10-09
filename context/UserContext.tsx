@@ -40,42 +40,54 @@ const UserProvider: React.FC = ({ children }) => {
     email: "",
   });
 
-  const { error, data } = useQuery(getUser, {
+  const { error, data: getUserData } = useQuery(getUser, {
     variables: { id: googleUser?.profileObj?.googleId },
   });
 
-  const [createUserMutation, { loading }] = useMutation(createUser, {
-    onCompleted: () => console.log("Mutation complete"),
-    onError: () => console.log("MutationFailed"),
-  });
-
-  if (error) {
-    console.error(error);
-    if (
-      error.message.includes(
-        'Could not find any entity of type "User" matching'
-      )
-    ) {
-      try {
-        createUserMutation({
-          variables: {
-            data: {
-              googleID: googleUser?.profileObj?.googleId,
-              firstName: googleUser?.profileObj?.givenName,
-              lastName: googleUser?.profileObj?.familyName,
-              email: googleUser?.profileObj?.email,
-            },
-          },
-        });
-      } catch (e) {
-        console.error(e);
-      }
+  const [createUserMutation, { data: createUserData }] = useMutation(
+    createUser,
+    {
+      onCompleted: () => console.log("User Created"),
+      onError: () => console.log("Failed to create user"),
     }
-  }
+  );
 
   useEffect(() => {
-    if (data) setUser(data?.getUser);
-  }, [data]);
+    if (getUserData) {
+      setUser(getUserData?.getUser);
+      console.log("Signed In");
+    }
+    if (createUserData) {
+      setUser(createUserData?.createUser);
+      console.log("Signed In");
+    }
+  }, [getUserData, createUserData]);
+
+  const newUser = async () => {
+    if (error) {
+      console.log("Not Signed In");
+      if (error.message.includes('type "User"')) {
+        try {
+          await createUserMutation({
+            variables: {
+              data: {
+                googleID: googleUser?.profileObj?.googleId,
+                firstName: googleUser?.profileObj?.givenName,
+                lastName: googleUser?.profileObj?.familyName,
+                email: googleUser?.profileObj?.email,
+              },
+            },
+          });
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (error) newUser();
+  }, [error]);
 
   return (
     <UserContext.Provider
