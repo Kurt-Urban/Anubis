@@ -1,7 +1,15 @@
 import classNames from "classnames";
 import React from "react";
 
-import { Button } from "@sonic-web-dev/core";
+import {
+  Button,
+  UncontrolledDropdown,
+  DropdownItem,
+  DropdownToggle,
+  DropdownMenu,
+  Col,
+  Row,
+} from "reactstrap";
 import { FaBars } from "react-icons/fa";
 import { useUser } from "../../../hooks";
 import GoogleAuth from "../utils/GoogleAuth";
@@ -9,73 +17,49 @@ import GoogleAuth from "../utils/GoogleAuth";
 const TopNavSettings = ({}) => {
   const {
     user: { firstName, email },
-    user,
   } = useUser();
-
-  console.log(user);
 
   return (
     <>
-      <div className="dropdown dropdown-end float-right">
-        <div tabIndex={0} className="m-1 text-lg btn btn-ghost">
+      <UncontrolledDropdown nav inNavbar>
+        <DropdownToggle className="d-flex bg-transparent border-0 text-200 align-items-center py-2">
           <FaBars />
-        </div>
-        <ul
-          tabIndex={0}
-          className="py-2 shadow menu dropdown-content bg-gray-600 rounded-md w-56 mr-1"
-        >
-          <div className={classNames(email !== "" ? "hidden" : "")}>
-            <li className="py-2 px-3">
-              <GoogleAuth />
-            </li>
-          </div>
-          <div className={classNames(email !== "" ? "" : "hidden")}>
-            <li className="py-2 px-3">
-              <span className="h-3">Hello {firstName}!</span>
-              <span className="text-xs h-12">Signed in as {email}</span>
-            </li>
-          </div>
-          <hr className="border-gray-500 mb-2" />
-          <li>
-            <Button
-              color="black"
-              className="mx-2 py-0 btn btn-ghost max-h-3 justify-center rounded-none"
-            >
-              <span className="font-normal">Account</span>
-            </Button>
-          </li>
-          <li>
-            <Button
-              color="black"
-              className="mx-2 py-0 btn btn-ghost max-h-3 justify-center "
-            >
-              <span className="font-normal">My Servers</span>
-            </Button>
-          </li>
-          <li>
-            <Button
-              color="black"
-              className="mx-2 py-0 btn btn-ghost max-h-3 justify-center "
-            >
-              <span className="font-normal">Open Bids</span>
-            </Button>
-          </li>
-
-          <hr className="border-gray-500 my-2 " />
-          <li>
-            <Button
-              color="black"
-              className="mx-2 py-0 btn btn-ghost max-h-3 justify-center"
-              onClick={() => {
-                window?.gapi?.auth2?.getAuthInstance()?.signOut();
-                window.location.reload();
-              }}
-            >
-              Sign Out
-            </Button>
-          </li>
-        </ul>
-      </div>
+        </DropdownToggle>
+        <DropdownMenu right className="bg-darker mx-1 p-4">
+          {firstName ? (
+            <Row>
+              <Col xs={12} className="mb-2">
+                <span className="text-light h5">Hello {firstName}!</span>
+              </Col>
+              <Col xs={12}>
+                <small className="text-light">Signed in as {email}</small>
+              </Col>
+            </Row>
+          ) : (
+            <Row>
+              <Col xs={12}>
+                <GoogleAuth />
+              </Col>
+            </Row>
+          )}
+          <hr className="bg-300" />
+          <Row className="mt-3">
+            <Col xs={12} className="d-flex justify-content-center">
+              <Button
+                color="accent"
+                outline
+                className=""
+                onClick={() => {
+                  window?.gapi?.auth2?.getAuthInstance()?.signOut();
+                  window.location.reload();
+                }}
+              >
+                Sign Out
+              </Button>{" "}
+            </Col>
+          </Row>
+        </DropdownMenu>
+      </UncontrolledDropdown>
     </>
   );
 };

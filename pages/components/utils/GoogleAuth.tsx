@@ -8,7 +8,7 @@ const GoogleAuth: React.FC = ({ ...props }) => {
   return (
     <>
       <GoogleLogin
-        className="justify-center"
+        className="justify-content-center"
         clientId={process.env.NEXT_PUBLIC_CLIENT_ID}
         buttonText="Login"
         onSuccess={(e) => setGoogleUser(e)}

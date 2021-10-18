@@ -2,9 +2,7 @@ import React from "react";
 import { ApolloProvider } from "@apollo/client";
 import client from "../apollo-client";
 
-import "tailwindcss/tailwind.css";
-import "../styles/globals.css";
-import "@sonic-web-dev/core";
+import "../styles/scss/globals.scss";
 import UserProvider from "../context/UserContext";
 
 const MyApp = ({ Component, pageProps }) => {
