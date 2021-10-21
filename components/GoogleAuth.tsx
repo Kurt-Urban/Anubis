@@ -1,6 +1,6 @@
 import React from "react";
 import GoogleLogin from "react-google-login";
-import useUser from "../../../hooks/useUser";
+import useUser from "../hooks/useUser";
 
 const GoogleAuth: React.FC = ({ ...props }) => {
   const { setGoogleUser } = useUser();

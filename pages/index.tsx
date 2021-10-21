@@ -1,15 +1,11 @@
 import React from "react";
 
-import Home from "./Home";
-
-const Index: React.FC = ({}) => {
+const Home: React.FC = ({}) => {
   return (
     <>
-      <div className="min-vh-100 bg-darkest">
-        <Home />
-      </div>
+      <div>Home</div>
     </>
   );
 };
 
-export default Index;
+export default Home;

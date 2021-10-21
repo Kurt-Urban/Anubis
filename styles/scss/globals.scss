@@ -1,11 +1,12 @@
 $theme-colors: (
   "primary": #243b53,
-  "secondary": #adb5bd,
+  "secondary": #627d98,
   "success": #468b55,
   "info": #98b0ff,
   "warning": #fb8500,
   "danger": #ac0000,
   "accent": #50d47c,
+  "accent2": #50d47c,
   "light": #cfcfcf,
   "lighter": #e1e1e1,
   "lightest": #f7f7f7,
@@ -21,5 +22,22 @@ $theme-colors: (
   "700": #243b53,
   "800": #102a43,
 );
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  color: #f7f7f7 !important;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
 
 @import "/node_modules/bootstrap/scss/bootstrap.scss";

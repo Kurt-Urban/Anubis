@@ -65,7 +65,6 @@ const UserProvider: React.FC = ({ children }) => {
 
   const newUser = async () => {
     if (error) {
-      console.log("Not Signed In");
       if (error.message.includes('type "User"')) {
         try {
           await createUserMutation({
