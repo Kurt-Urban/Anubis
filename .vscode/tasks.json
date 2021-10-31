@@ -8,6 +8,15 @@
       "problemMatcher": ["$tsc-watch"],
       "group": "build",
       "label": "tsc: watch - tsconfig.json"
+    },
+    {
+      "type": "shell",
+      "command": "npm run dev",
+      "label": "Start UI",
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": []
     }
   ]
 }

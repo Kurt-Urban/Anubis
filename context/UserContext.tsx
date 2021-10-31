@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { createContext, useContext, useEffect, useState } from "react";
-import { createUser } from "../pages/api/mutations";
-import { getUser } from "../pages/api/queries";
+import { createUserMutation } from "@/mutations";
+import { getUserQuery } from "@/queries";
 
 interface User {
   id: string;
@@ -40,12 +40,12 @@ const UserProvider: React.FC = ({ children }) => {
     email: "",
   });
 
-  const { error, data: getUserData } = useQuery(getUser, {
+  const { error, data: getUserData } = useQuery(getUserQuery, {
     variables: { id: googleUser?.profileObj?.googleId },
   });
 
-  const [createUserMutation, { data: createUserData }] = useMutation(
-    createUser,
+  const [createUser, { data: createUserData }] = useMutation(
+    createUserMutation,
     {
       onCompleted: () => console.log("User Created"),
       onError: () => console.log("Failed to create user"),
@@ -67,7 +67,7 @@ const UserProvider: React.FC = ({ children }) => {
     if (error) {
       if (error.message.includes('type "User"')) {
         try {
-          await createUserMutation({
+          await createUser({
             variables: {
               data: {
                 googleID: googleUser?.profileObj?.googleId,

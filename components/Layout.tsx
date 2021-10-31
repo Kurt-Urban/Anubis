@@ -1,5 +1,5 @@
 import React from "react";
-import { TopNav } from ".";
+import { TopNav } from "@/components";
 
 const Layout: React.FC = ({ children }) => {
   return (

@@ -15,7 +15,7 @@ import {
   DropdownItem,
   Row,
 } from "reactstrap";
-import TopNavSettings from "./TopNavSettings";
+import { TopNavSettings } from "@/components";
 import { FaMicrosoft } from "react-icons/fa";
 
 const TopNav: React.FC = ({}) => {

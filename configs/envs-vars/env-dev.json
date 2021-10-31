@@ -1,8 +1,0 @@
-{
-  "URI": "https://40tykjcfq5.execute-api.us-east-1.amazonaws.com/dev/portal",
-  "SUBSCRIPTION_URI": "wss://subscriptions-dev.leadarena.com/subscriptions",
-  "AWS_COGNITO_IDENTITY_POOL_ID": "us-east-1:1c500333-d67b-40fe-b596-4d22eb319ee2",
-  "AWS_COGNITO_REGION": "us-east-1",
-  "AWS_USER_POOLS_ID": "us-east-1_VxaRaMrPy",
-  "AWS_USER_POOLS_WEB_CLIENT_ID": "1d3nppplk4sqp1ba1coten94s0"
-}

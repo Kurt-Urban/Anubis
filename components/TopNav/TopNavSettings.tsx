@@ -1,4 +1,3 @@
-import classNames from "classnames";
 import React from "react";
 import { useUser } from "../../hooks";
 
@@ -18,9 +17,7 @@ import Link from "next/link";
 import GoogleAuth from "../GoogleAuth";
 
 const TopNavSettings: React.FC = ({}) => {
-  const {
-    user: { firstName, email, googleID },
-  } = useUser();
+  const { user } = useUser();
 
   return (
     <>
@@ -29,21 +26,25 @@ const TopNavSettings: React.FC = ({}) => {
           <FaBars />
         </DropdownToggle>
         <DropdownMenu right className="bg-darker mx-1 px-4 py-3">
-          {firstName ? (
+          {user?.googleID ? (
             <>
               <Row>
                 <Col xs={12} className="mb-2">
-                  <span className="text-lighter h5">Hello {firstName}!</span>
+                  <span className="text-lighter h5">
+                    Hello {user?.firstName}!
+                  </span>
                 </Col>
                 <Col xs={12}>
-                  <small className="text-lighter">Signed in as {email}</small>
+                  <small className="text-lighter">
+                    Signed in as {user?.email}
+                  </small>
                 </Col>
               </Row>
               <hr className="bg-300" />
               <Row>
                 <Col xs={12} className="d-flex justify-content-center mb-2">
                   <DropdownItem className="text-300 bg-transparent d-flex justify-content-center">
-                    <Link passHref href={`/profile/${googleID}`}>
+                    <Link passHref href={`/profile/${user?.googleID}`}>
                       <div>Profile</div>
                     </Link>
                   </DropdownItem>

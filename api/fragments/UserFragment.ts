@@ -8,6 +8,11 @@ const UserFragment = gql`
     servers {
       id
       serverName
+      ipAddress
+      status
+      bannerURL
+      listSlot
+      gameID
     }
     email
     googleID
