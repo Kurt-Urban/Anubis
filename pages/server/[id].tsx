@@ -16,7 +16,7 @@ import { createServerMutation, updateServerMutation } from "@/mutations";
 import { useUser, useServer, useTags } from "@/hooks";
 
 const gameIDList = [
-  { label: "Minecraft", value: "minecraft" },
+  { label: "Minecraft", value: "Minecraft" },
   // { label: "HyTale", value: "hyTale" },
 ];
 
@@ -42,7 +42,7 @@ const ServerDetails: React.FC = ({}) => {
     },
     onError: (error) => console.log("GraphQL Error:" + error),
   });
-
+  console.log(server?.gameID);
   if (!isNew && !server && loading) return null;
   return (
     <Formik
@@ -52,7 +52,7 @@ const ServerDetails: React.FC = ({}) => {
               serverName: "",
               ipAddress: "",
               bannerURL: "",
-              gameID: "minecraft",
+              gameID: "Minecraft",
               tags: [],
             }
           : {
@@ -64,35 +64,34 @@ const ServerDetails: React.FC = ({}) => {
             }
       }
       onSubmit={(values) => {
-        // if (isNew) {
-        //   createServer({
-        //     variables: {
-        //       input: {
-        //         ownerID: user!.id,
-        //         serverName: values.serverName,
-        //         ipAddress: values.ipAddress,
-        //         bannerURL: values.bannerURL,
-        //         gameID: values.gameID,
-        //       },
-        //       tags: values.tags,
-        //     },
-        //   });
-        // }
-        // if (!isNew) {
-        //   updateServer({
-        //     variables: {
-        //       input: {
-        //         serverName: values.serverName,
-        //         ipAddress: values.ipAddress,
-        //         bannerURL: values.bannerURL,
-        //         gameID: values.gameID,
-        //       },
-        //       tags: values.tags,
-        //       id: serverID,
-        //     },
-        //   });
-        // }
-        console.log(values);
+        if (isNew) {
+          createServer({
+            variables: {
+              input: {
+                ownerID: user!.id,
+                serverName: values.serverName,
+                ipAddress: values.ipAddress,
+                bannerURL: values.bannerURL,
+                gameID: values.gameID,
+              },
+              tags: values.tags,
+            },
+          });
+        }
+        if (!isNew) {
+          updateServer({
+            variables: {
+              input: {
+                serverName: values.serverName,
+                ipAddress: values.ipAddress,
+                bannerURL: values.bannerURL,
+                gameID: values.gameID,
+              },
+              tags: values.tags,
+              id: serverID,
+            },
+          });
+        }
       }}
     >
       {({ values }) => {

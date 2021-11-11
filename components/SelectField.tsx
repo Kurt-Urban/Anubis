@@ -38,6 +38,7 @@ const SelectField: React.FC<SelectProps> = ({
   const defaultValue = () => {
     if (Array.isArray(values?.[name]))
       return values?.[name].map((option) => ({ value: option, label: option }));
+    return { label: values?.[name], value: values?.[name] };
   };
 
   return creatable ? (
