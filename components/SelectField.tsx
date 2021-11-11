@@ -37,16 +37,7 @@ const SelectField: React.FC<SelectProps> = ({
 
   const defaultValue = () => {
     if (Array.isArray(values?.[name]))
-      return options.map((option) => {
-        if (values?.[name].filter((o) => o === option.value)) {
-          return option;
-        }
-      });
-
-    if (!Array.isArray(values?.[name]))
-      return options.filter((option: any) => option?.value === values?.[name]);
-
-    return;
+      return values?.[name].map((option) => ({ value: option, label: option }));
   };
 
   return creatable ? (
@@ -55,7 +46,7 @@ const SelectField: React.FC<SelectProps> = ({
       onChange={(e: any) => onChange(e)}
       options={options}
       isMulti={isMulti}
-      defaultValue={defaultValue()}
+      defaultValue={defaultValue}
       isClearable
     />
   ) : (
@@ -65,7 +56,7 @@ const SelectField: React.FC<SelectProps> = ({
       options={options}
       isMulti={isMulti}
       isClearable={isMulti}
-      defaultValue={defaultValue()}
+      defaultValue={defaultValue}
       isDisabled={disabled}
     />
   );

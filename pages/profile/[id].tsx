@@ -6,6 +6,8 @@ import Image from "next/image";
 
 import { Button, Card, Col, Row } from "reactstrap";
 import ReactSwitch from "react-switch";
+import { useMutation } from "@apollo/client";
+import { deleteServerMutation } from "@/mutations";
 
 const UserProfile: React.FC = ({}) => {
   const { user } = useUser();
@@ -17,6 +19,8 @@ const UserProfile: React.FC = ({}) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
+
+  const [deleteServer] = useMutation(deleteServerMutation);
 
   return (
     <>
@@ -107,6 +111,17 @@ const UserProfile: React.FC = ({}) => {
                       </small>
                     </Col>
                     <Col>{server.listSlot || "Not Listed"}</Col>
+                  </Col>
+                  <Col>
+                    <Button
+                      outline
+                      color="danger"
+                      onClick={() =>
+                        deleteServer({ variables: { id: server.id } })
+                      }
+                    >
+                      Delete
+                    </Button>
                   </Col>
                 </Row>
               </Card>

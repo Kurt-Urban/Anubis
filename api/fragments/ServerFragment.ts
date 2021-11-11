@@ -12,7 +12,6 @@ const ServerFragment = gql`
     tags {
       tag {
         value
-        id
       }
     }
   }

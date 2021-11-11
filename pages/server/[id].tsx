@@ -12,33 +12,38 @@ import {
 } from "reactstrap";
 import { SelectField } from "@/components";
 import { useMutation } from "@apollo/react-hooks";
-import { createServerMutation } from "@/mutations";
-import useUser from "hooks/useUser";
-import { useServer } from "hooks/useServer";
+import { createServerMutation, updateServerMutation } from "@/mutations";
+import { useUser, useServer, useTags } from "@/hooks";
 
 const gameIDList = [
   { label: "Minecraft", value: "minecraft" },
-  { label: "HyTale", value: "hyTale" },
+  // { label: "HyTale", value: "hyTale" },
 ];
 
 const ServerDetails: React.FC = ({}) => {
-  const { asPath } = useRouter();
   const history = useRouter();
+  const { asPath } = useRouter();
   const isNew = asPath.includes("new");
-  const { user } = useUser();
   const serverID = asPath.slice(8);
-  const { server } = useServer(serverID);
-  const [createServer, { data: serverData }] = useMutation(
-    createServerMutation,
-    {
-      onCompleted: () => {
-        console.log("Server created");
-        history.push(`/server/${serverData.id}`);
-      },
-      onError: () => console.log("Failed to create server"),
-    }
-  );
-  if (!isNew && !server) return null;
+  const { user } = useUser();
+  const { server, loading } = useServer(serverID);
+  const { tags } = useTags();
+
+  const [createServer] = useMutation(createServerMutation, {
+    onCompleted: () => {
+      console.log("Server created");
+    },
+    onError: (error) => console.log("GraphQL Error:" + error),
+  });
+
+  const [updateServer] = useMutation(updateServerMutation, {
+    onCompleted: () => {
+      console.log("Server updated");
+    },
+    onError: (error) => console.log("GraphQL Error:" + error),
+  });
+
+  if (!isNew && !server && loading) return null;
   return (
     <Formik
       initialValues={
@@ -55,26 +60,39 @@ const ServerDetails: React.FC = ({}) => {
               ipAddress: server?.ipAddress || "",
               bannerURL: server?.bannerURL || "",
               gameID: server?.gameID || "Minecraft",
-              tags: server?.tags || [],
+              tags: server?.tags?.map((t: any) => t.tag.value) || [],
             }
       }
       onSubmit={(values) => {
-        if (isNew) {
-          createServer({
-            variables: {
-              input: {
-                ownerID: user!.id,
-                serverName: values.serverName,
-                ipAddress: values.ipAddress,
-                bannerURL: values.bannerURL,
-                gameID: values.gameID,
-                tags: values.tags.map((tag: any) =>
-                  tag.toLowerCase().replace(/\s/g, "")
-                ),
-              },
-            },
-          });
-        }
+        // if (isNew) {
+        //   createServer({
+        //     variables: {
+        //       input: {
+        //         ownerID: user!.id,
+        //         serverName: values.serverName,
+        //         ipAddress: values.ipAddress,
+        //         bannerURL: values.bannerURL,
+        //         gameID: values.gameID,
+        //       },
+        //       tags: values.tags,
+        //     },
+        //   });
+        // }
+        // if (!isNew) {
+        //   updateServer({
+        //     variables: {
+        //       input: {
+        //         serverName: values.serverName,
+        //         ipAddress: values.ipAddress,
+        //         bannerURL: values.bannerURL,
+        //         gameID: values.gameID,
+        //       },
+        //       tags: values.tags,
+        //       id: serverID,
+        //     },
+        //   });
+        // }
+        console.log(values);
       }}
     >
       {({ values }) => {
@@ -99,7 +117,7 @@ const ServerDetails: React.FC = ({}) => {
               <Row className="mx-2 mt-2">
                 <Col>
                   <Card className="bg-800 border-700 shadow">
-                    <CardHeader className="bg-darkest d-flex justify-content-center h5">
+                    <CardHeader className="bg-600 d-flex justify-content-center h5">
                       General Information
                     </CardHeader>
                     <CardBody>
@@ -130,8 +148,8 @@ const ServerDetails: React.FC = ({}) => {
                             options={gameIDList}
                           />
                         </Col>
-                        <Col xs={6}>
-                          <div>IP Address</div>
+                        <Col xs={8}>
+                          <div>Banner URL</div>
                           <Field
                             name="bannerURL"
                             className="bg-white form-control mt-1"
@@ -146,24 +164,23 @@ const ServerDetails: React.FC = ({}) => {
               <Row className="mx-2 mt-3">
                 <Col>
                   <Card className="bg-800 border-700 shadow">
-                    <CardHeader className="bg-darkest d-flex justify-content-center h5">
+                    <CardHeader className="bg-600 d-flex justify-content-center h5">
                       Tags
                     </CardHeader>
                     <CardBody>
                       <Row className="mt-2">
                         <Col xs={12}>
-                          <div>Tags</div>
                           <SelectField
                             name="tags"
                             className="mt-1"
                             isMulti
                             creatable
-                            options={server?.tags?.map((t: any) => ({
-                              label:
-                                t.tag.value[0].toUpperCase() +
-                                t.tag.value.slice(1),
-                              value: t.tag.value,
-                            }))}
+                            options={[].concat(
+                              tags?.map((t: any) => ({
+                                label: t.value,
+                                value: t.value,
+                              }))
+                            )}
                           />
                         </Col>
                       </Row>
