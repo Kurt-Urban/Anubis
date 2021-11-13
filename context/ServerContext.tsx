@@ -1,7 +1,4 @@
-import { useMutation, useQuery } from "@apollo/client";
-import { createContext, useContext, useEffect, useState } from "react";
-import { createUserMutation } from "@/mutations";
-import { getServerQuery } from "@/queries";
+import { createContext, useContext, useState } from "react";
 
 interface Server {
   id: string;

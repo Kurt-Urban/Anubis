@@ -101,8 +101,4 @@ const UserProvider: React.FC = ({ children }) => {
   );
 };
 
-export function useAppContext() {
-  return useContext(UserContext);
-}
-
 export default UserProvider;
