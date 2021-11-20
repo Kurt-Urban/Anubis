@@ -2,10 +2,10 @@ import { useMutation, useQuery } from "@apollo/client";
 import { createContext, useContext, useEffect, useState } from "react";
 import { createUserMutation } from "@/mutations";
 import { getUserQuery } from "@/queries";
+import { supabase } from "utils/supabaseClient";
 
 interface User {
   id: string;
-  googleID: string;
   servers: object[];
   firstName: string;
   lastName: string;
@@ -14,34 +14,30 @@ interface User {
 
 export const UserContext = createContext<{
   user: User;
-  googleUser: object;
-  setGoogleUser: (googleUser: object) => void;
 }>({
   user: {
     id: "",
-    googleID: "",
     servers: [],
     firstName: "",
     lastName: "",
     email: "",
   },
-  googleUser: {},
-  setGoogleUser: (googleUser: object) => {},
 });
 
 const UserProvider: React.FC = ({ children }) => {
-  const [googleUser, setGoogleUser] = useState({});
   const [user, setUser] = useState({
     id: "",
-    googleID: "",
     servers: [],
     firstName: "",
     lastName: "",
     email: "",
   });
 
+  const supaUser = supabase.auth.user();
+  console.log(supaUser);
+
   const { error, data: getUserData } = useQuery(getUserQuery, {
-    variables: { id: googleUser?.profileObj?.googleId },
+    variables: { id: supaUser?.id },
   });
 
   const [createUser, { data: createUserData }] = useMutation(
@@ -70,10 +66,10 @@ const UserProvider: React.FC = ({ children }) => {
           await createUser({
             variables: {
               data: {
-                googleID: googleUser?.profileObj?.googleId,
-                firstName: googleUser?.profileObj?.givenName,
-                lastName: googleUser?.profileObj?.familyName,
-                email: googleUser?.profileObj?.email,
+                id: supaUser?.id,
+                firstName: supaUser?.givenName,
+                lastName: supaUser?.familyName,
+                email: supaUser?.email,
               },
             },
           });
@@ -92,8 +88,6 @@ const UserProvider: React.FC = ({ children }) => {
     <UserContext.Provider
       value={{
         user,
-        googleUser,
-        setGoogleUser,
       }}
     >
       {children}

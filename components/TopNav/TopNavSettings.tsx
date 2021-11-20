@@ -90,8 +90,12 @@ const TopNavSettings: React.FC = ({}) => {
               <Col xs={12} className="d-flex justify-content-center mb-2">
                 <small className="text-light">Please Sign In</small>
               </Col>
-              <Col xs={12} className="d-flex justify-content-center">
-                <GoogleAuth />
+              <Col xs={12} className="d-flex justify-content-center mb-2">
+                <Link href="/login">
+                  <Button color="accent" outline>
+                    Login
+                  </Button>
+                </Link>
               </Col>
             </Row>
           )}
