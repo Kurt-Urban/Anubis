@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import { Field, Form, Formik } from "formik";
+import useUser from "hooks/useUser";
 import { useState } from "react";
 import { FaServer } from "react-icons/fa";
 import { Button, Col, Container, Input, Row } from "reactstrap";
@@ -7,29 +8,22 @@ import { supabase } from "../utils/supabaseClient";
 
 const Auth: React.FC = () => {
   const [newUser, setNewUser] = useState(false);
-  let errorMessage = "";
+  const { user, signIn, signUp } = useUser();
+
   return (
     <Formik
       initialValues={{ email: "", password: "", firstName: "", lastName: "" }}
       onSubmit={async (values) => {
         if (newUser) {
-          const { error, user } = await supabase.auth.signUp({
+          signUp({
             email: values.email,
             password: values.password,
+            firstName: values.firstName,
+            lastName: values.lastName,
           });
-          console.log(user);
-          if (error) {
-            errorMessage = error.message;
-            return;
-          }
         }
-        const { error } = await supabase.auth.signIn({
-          email: values.email,
-          password: values.password,
-        });
-        if (error) {
-          console.error(error);
-          return;
+        if (!newUser) {
+          signIn({ email: values.email, password: values.password });
         }
         setNewUser(false);
       }}

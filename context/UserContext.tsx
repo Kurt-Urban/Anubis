@@ -6,7 +6,7 @@ import { supabase } from "utils/supabaseClient";
 
 interface User {
   id: string;
-  servers: object[];
+  servers?: object[];
   firstName: string;
   lastName: string;
   email: string;
@@ -14,6 +14,8 @@ interface User {
 
 export const UserContext = createContext<{
   user: User;
+  signUp: (input: object) => void;
+  signIn: (input: object) => void;
 }>({
   user: {
     id: "",
@@ -22,6 +24,8 @@ export const UserContext = createContext<{
     lastName: "",
     email: "",
   },
+  signUp: () => {},
+  signIn: () => {},
 });
 
 const UserProvider: React.FC = ({ children }) => {
@@ -35,9 +39,10 @@ const UserProvider: React.FC = ({ children }) => {
 
   const supaUser = supabase.auth.user();
   console.log(supaUser);
-
-  const { error, data: getUserData } = useQuery(getUserQuery, {
+  const { data: userData } = useQuery(getUserQuery, {
     variables: { id: supaUser?.id },
+    skip: !supaUser,
+    onError: (error) => console.error(error),
   });
 
   const [createUser, { data: createUserData }] = useMutation(
@@ -49,45 +54,55 @@ const UserProvider: React.FC = ({ children }) => {
   );
 
   useEffect(() => {
-    if (getUserData) {
-      setUser(getUserData?.getUser);
-      console.log("Signed In");
+    if (userData) {
+      setUser(userData?.getUser);
     }
     if (createUserData) {
       setUser(createUserData?.createUser);
-      console.log("Signed In");
     }
-  }, [getUserData, createUserData]);
+  }, [userData, createUserData]);
 
-  const newUser = async () => {
-    if (error) {
-      if (error.message.includes('type "User"')) {
-        try {
-          await createUser({
-            variables: {
-              data: {
-                id: supaUser?.id,
-                firstName: supaUser?.givenName,
-                lastName: supaUser?.familyName,
-                email: supaUser?.email,
-              },
-            },
-          });
-        } catch (e) {
-          console.error(e);
-        }
-      }
+  const signUp = async (input: any) => {
+    try {
+      await supabase.auth.signUp({
+        email: input.email,
+        password: input.password,
+      });
+      const { email, id } = await supabase.auth.user();
+      await createUser({
+        variables: {
+          input: {
+            id,
+            firstName: input.firstName,
+            lastName: input.lastName,
+            email,
+          },
+        },
+      });
+    } catch (e) {
+      console.error(e);
     }
   };
 
-  useEffect(() => {
-    if (error) newUser();
-  }, [error]);
+  const signIn = async (input: any) => {
+    try {
+      await supabase.auth.signIn({
+        email: input.email,
+        password: input.password,
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {}, []);
 
   return (
     <UserContext.Provider
       value={{
         user,
+        signUp,
+        signIn,
       }}
     >
       {children}

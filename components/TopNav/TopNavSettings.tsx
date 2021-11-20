@@ -14,8 +14,6 @@ import { FaBars } from "react-icons/fa";
 
 import Link from "next/link";
 
-import GoogleAuth from "../GoogleAuth";
-
 const TopNavSettings: React.FC = ({}) => {
   const { user } = useUser();
 
@@ -26,7 +24,7 @@ const TopNavSettings: React.FC = ({}) => {
           <FaBars />
         </DropdownToggle>
         <DropdownMenu right className="bg-darker mx-1 px-4 py-3">
-          {user?.googleID ? (
+          {user ? (
             <>
               <Row>
                 <Col xs={12} className="mb-2">
@@ -44,7 +42,7 @@ const TopNavSettings: React.FC = ({}) => {
               <Row>
                 <Col xs={12} className="d-flex justify-content-center mb-2">
                   <DropdownItem className="text-300 bg-transparent d-flex justify-content-center">
-                    <Link passHref href={`/profile/${user?.googleID}`}>
+                    <Link passHref href={`/profile/${user.id}`}>
                       <div>Profile</div>
                     </Link>
                   </DropdownItem>
@@ -75,13 +73,10 @@ const TopNavSettings: React.FC = ({}) => {
                     color="accent"
                     outline
                     className=""
-                    onClick={() => {
-                      window?.gapi?.auth2?.getAuthInstance()?.signOut();
-                      window.location.reload();
-                    }}
+                    onClick={() => {}}
                   >
                     Sign Out
-                  </Button>{" "}
+                  </Button>
                 </Col>
               </Row>
             </>

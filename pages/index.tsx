@@ -4,9 +4,6 @@ import { supabase } from "utils/supabaseClient";
 const Home: React.FC = ({}) => {
   const [session, setSession] = useState<null | object>(null);
 
-  const data = supabase.from("user");
-  console.log(data);
-
   useEffect(() => {
     setSession(supabase.auth.session());
 

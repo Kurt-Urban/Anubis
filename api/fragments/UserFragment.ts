@@ -15,7 +15,6 @@ const UserFragment = gql`
       gameID
     }
     email
-    googleID
   }
 `;
 
