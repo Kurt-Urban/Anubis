@@ -13,7 +13,7 @@ import {
 import { SelectField } from "@/components";
 import { useMutation } from "@apollo/react-hooks";
 import { createServerMutation, updateServerMutation } from "@/mutations";
-import { useUser, useServer, useTags } from "@/hooks";
+import { useUser, useServer, useTags, useNotification } from "@/hooks";
 
 const gameIDList = [
   { label: "Minecraft", value: "Minecraft" },
@@ -28,21 +28,25 @@ const ServerDetails: React.FC = ({}) => {
   const { user } = useUser();
   const { server, loading } = useServer(serverID);
   const { tags } = useTags();
+  const { notification } = useNotification();
 
   const [createServer] = useMutation(createServerMutation, {
-    onCompleted: () => {
-      console.log("Server created");
+    onError: (error) => {
+      console.error("GraphQL Error:" + error);
+      notification("GraphQL Error:" + error, "error");
     },
-    onError: (error) => console.log("GraphQL Error:" + error),
   });
 
   const [updateServer] = useMutation(updateServerMutation, {
     onCompleted: () => {
-      console.log("Server updated");
+      notification("Server updated successfully", "danger");
     },
-    onError: (error) => console.log("GraphQL Error:" + error),
+    onError: (error) => {
+      console.error("GraphQL Error:" + error);
+      notification("GraphQL Error:" + error, "error");
+    },
   });
-  console.log(server?.gameID);
+
   if (!isNew && !server && loading) return null;
   return (
     <Formik

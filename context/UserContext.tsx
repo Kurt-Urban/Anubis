@@ -38,7 +38,7 @@ const UserProvider: React.FC = ({ children }) => {
   });
 
   const supaUser = supabase.auth.user();
-  console.log(supaUser);
+
   const { data: userData } = useQuery(getUserQuery, {
     variables: { id: supaUser?.id },
     skip: !supaUser,
@@ -48,7 +48,6 @@ const UserProvider: React.FC = ({ children }) => {
   const [createUser, { data: createUserData }] = useMutation(
     createUserMutation,
     {
-      onCompleted: () => console.log("User Created"),
       onError: () => console.log("Failed to create user"),
     }
   );

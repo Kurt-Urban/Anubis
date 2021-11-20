@@ -12,9 +12,7 @@ const CreateServerModal: React.FC = ({}) => {
           ipAddress: "",
           serverName: "",
         }}
-        onSubmit={(values) => {
-          console.log(values);
-        }}
+        onSubmit={(values) => {}}
       >
         <Form>
           <Modal>
