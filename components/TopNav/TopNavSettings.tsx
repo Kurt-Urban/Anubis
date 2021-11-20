@@ -1,6 +1,5 @@
 import React from "react";
-import { useUser } from "../../hooks";
-
+import { useUser } from "hooks";
 import {
   Button,
   UncontrolledDropdown,
@@ -11,11 +10,13 @@ import {
   Row,
 } from "reactstrap";
 import { FaBars } from "react-icons/fa";
-
 import Link from "next/link";
+import { supabase } from "utils/supabaseClient";
+import { useRouter } from "next/router";
 
 const TopNavSettings: React.FC = ({}) => {
   const { user } = useUser();
+  const history = useRouter();
 
   return (
     <>
@@ -24,7 +25,7 @@ const TopNavSettings: React.FC = ({}) => {
           <FaBars />
         </DropdownToggle>
         <DropdownMenu right className="bg-darker mx-1 px-4 py-3">
-          {user ? (
+          {supabase.auth.user() ? (
             <>
               <Row>
                 <Col xs={12} className="mb-2">
@@ -72,8 +73,10 @@ const TopNavSettings: React.FC = ({}) => {
                   <Button
                     color="accent"
                     outline
-                    className=""
-                    onClick={() => {}}
+                    onClick={() => {
+                      supabase.auth.signOut();
+                      history.push("/");
+                    }}
                   >
                     Sign Out
                   </Button>

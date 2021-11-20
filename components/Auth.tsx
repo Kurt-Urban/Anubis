@@ -1,13 +1,14 @@
 import classNames from "classnames";
 import { Field, Form, Formik } from "formik";
 import useUser from "hooks/useUser";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { FaServer } from "react-icons/fa";
-import { Button, Col, Container, Input, Row } from "reactstrap";
-import { supabase } from "../utils/supabaseClient";
+import { Button, Col, Container, Row } from "reactstrap";
 
 const Auth: React.FC = () => {
   const [newUser, setNewUser] = useState(false);
+  const history = useRouter();
   const { user, signIn, signUp } = useUser();
 
   return (
@@ -15,17 +16,21 @@ const Auth: React.FC = () => {
       initialValues={{ email: "", password: "", firstName: "", lastName: "" }}
       onSubmit={async (values) => {
         if (newUser) {
-          signUp({
-            email: values.email,
+          await signUp({
+            email: values.email.toLowerCase(),
             password: values.password,
             firstName: values.firstName,
             lastName: values.lastName,
           });
+          history.push(`/profile/${user.id}`);
         }
         if (!newUser) {
-          signIn({ email: values.email, password: values.password });
+          await signIn({
+            email: values.email.toLowerCase(),
+            password: values.password,
+          });
+          history.push("/");
         }
-        setNewUser(false);
       }}
     >
       <Form className="page-container">
