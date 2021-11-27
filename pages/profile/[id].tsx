@@ -28,20 +28,12 @@ const UserProfile: React.FC = ({}) => {
         <Col xs={4}>
           <Card className="bg-800 border-700 shadow p-3">
             <Row>
-              <Col xs={2}>
-                <Image
-                  src="/public/favicon.ico"
-                  width={75}
-                  height={75}
-                  alt="Profile Photo"
-                  className="border border-700 rounded"
-                />
-              </Col>
               <Col xs={10}>
                 <div className="h2">
                   {user?.firstName} {user?.lastName}
                 </div>
               </Col>
+              <Col>{user?.id}</Col>
             </Row>
           </Card>
         </Col>

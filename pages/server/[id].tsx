@@ -10,10 +10,13 @@ import {
   Container,
   Row,
 } from "reactstrap";
+import Image from "next/image";
 import { SelectField } from "@/components";
 import { useMutation } from "@apollo/react-hooks";
 import { createServerMutation, updateServerMutation } from "@/mutations";
 import { useUser, useServer, useTags, useNotification } from "@/hooks";
+import Dropzone from "react-dropzone";
+import { supabase } from "utils/supabaseClient";
 
 const gameIDList = [
   { label: "Minecraft", value: "Minecraft" },
@@ -39,13 +42,17 @@ const ServerDetails: React.FC = ({}) => {
 
   const [updateServer] = useMutation(updateServerMutation, {
     onCompleted: () => {
-      notification("Server updated successfully", "danger");
+      notification("Server updated successfully", "success");
     },
     onError: (error) => {
       console.error("GraphQL Error:" + error);
       notification("GraphQL Error:" + error, "error");
     },
   });
+
+  const { publicURL, error: urlError } = supabase.storage
+    .from("dev")
+    .getPublicUrl(`banners/testBanner.gif`);
 
   if (!isNew && !server && loading) return null;
   return (
@@ -56,49 +63,68 @@ const ServerDetails: React.FC = ({}) => {
               serverName: "",
               ipAddress: "",
               bannerURL: "",
-              gameID: "Minecraft",
               tags: [],
+              banner: null,
             }
           : {
               serverName: server?.serverName,
               ipAddress: server?.ipAddress || "",
               bannerURL: server?.bannerURL || "",
-              gameID: server?.gameID || "Minecraft",
+              banner: server?.banner || null,
               tags: server?.tags?.map((t: any) => t.tag.value) || [],
             }
       }
-      onSubmit={(values) => {
-        if (isNew) {
-          createServer({
-            variables: {
-              input: {
-                ownerID: user!.id,
-                serverName: values.serverName,
-                ipAddress: values.ipAddress,
-                bannerURL: values.bannerURL,
-                gameID: values.gameID,
+      onSubmit={async (values) => {
+        try {
+          const { error } = await supabase.storage
+            .from("dev")
+            .upload(`banners/${values.banner?.[0].path}`, values.banner?.[0], {
+              contentType: "image/gif",
+            });
+          if (error) {
+            notification(error.message, "error");
+          }
+          const { publicURL, error: urlError } = await supabase.storage
+            .from("dev")
+            .getPublicUrl(`banners/${values.banner?.[0].path}`);
+
+          if (urlError) {
+            notification(urlError.message, "error");
+          }
+
+          if (isNew) {
+            await createServer({
+              variables: {
+                input: {
+                  ownerID: user!.id,
+                  serverName: values.serverName,
+                  ipAddress: values.ipAddress,
+                  bannerURL: publicURL || "",
+                  gameID: "Minecraft",
+                },
+                tags: values.tags,
               },
-              tags: values.tags,
-            },
-          });
-        }
-        if (!isNew) {
-          updateServer({
-            variables: {
-              input: {
-                serverName: values.serverName,
-                ipAddress: values.ipAddress,
-                bannerURL: values.bannerURL,
-                gameID: values.gameID,
+            });
+          } else {
+            await updateServer({
+              variables: {
+                input: {
+                  serverName: values.serverName,
+                  ipAddress: values.ipAddress,
+                  bannerURL: publicURL || server.bannerURL,
+                  gameID: "Minecraft",
+                },
+                tags: values.tags,
+                id: serverID,
               },
-              tags: values.tags,
-              id: serverID,
-            },
-          });
+            });
+          }
+        } catch (e) {
+          console.error(e);
         }
       }}
     >
-      {({ values }) => {
+      {({ setFieldValue, values }) => {
         return (
           <Container className="w-75">
             <Form>
@@ -120,7 +146,7 @@ const ServerDetails: React.FC = ({}) => {
               <Row className="mx-2 mt-2">
                 <Col>
                   <Card className="bg-800 border-700 shadow">
-                    <CardHeader className="bg-600 d-flex justify-content-center h5">
+                    <CardHeader className="bg-darkest d-flex justify-content-center h5">
                       General Information
                     </CardHeader>
                     <CardBody>
@@ -142,22 +168,43 @@ const ServerDetails: React.FC = ({}) => {
                           />
                         </Col>
                       </Row>
-                      <Row className="mt-2">
-                        <Col xs={4}>
-                          <div>Game</div>
-                          <SelectField
-                            name="gameID"
-                            className="mt-1"
-                            options={gameIDList}
-                          />
-                        </Col>
-                        <Col xs={8}>
+                      <Row>
+                        <Col xs={12} className="mt-2">
                           <div>Banner URL</div>
                           <Field
                             name="bannerURL"
-                            className="bg-white form-control mt-1"
+                            className="bg-light form-control mt-1"
                             placeholder="Banner URL..."
+                            disabled
                           />
+                        </Col>
+                        <Col xs={12} className="text-center mt-4">
+                          <Image
+                            src={server?.bannerURL || "/placeholderBanner.png"}
+                            alt="banner img"
+                            height="60"
+                            width="468"
+                          />
+                        </Col>
+                        <Col xs={7} className="mt-3 mx-auto">
+                          <div className="border border-light rounded text-center p-3 clickable">
+                            <Dropzone
+                              onDropAccepted={(file) =>
+                                setFieldValue("banner", file)
+                              }
+                            >
+                              {({ getRootProps, getInputProps }) => (
+                                <div {...getRootProps()}>
+                                  <input {...getInputProps()} />
+                                  <div>
+                                    {values.banner
+                                      ? values.banner?.[0].path
+                                      : "Drag and drop banner .gif here or click to browse files."}
+                                  </div>
+                                </div>
+                              )}
+                            </Dropzone>
+                          </div>
                         </Col>
                       </Row>
                     </CardBody>

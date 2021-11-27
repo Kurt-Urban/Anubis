@@ -59,8 +59,8 @@ const NotificationProvider: React.FC = ({ children }) => {
       >
         {notifications.map((n: any) => (
           <Alert
-            className={`bg-${n.color}`}
-            style={{ opacity: 0.85 }}
+            className={`bg-${n.color} border-light text-lighter`}
+            style={{ opacity: 0.92 }}
             id={n.id}
             color={n.color}
             key={n.id}

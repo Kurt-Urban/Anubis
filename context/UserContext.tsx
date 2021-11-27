@@ -68,6 +68,7 @@ const UserProvider: React.FC = ({ children }) => {
         password: input.password,
       });
       const { email, id } = await supabase.auth.user();
+
       await createUser({
         variables: {
           input: {
