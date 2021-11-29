@@ -20,6 +20,8 @@ const UserProfile: React.FC = ({}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
+  const servers = user?.servers || [];
+
   const [deleteServer] = useMutation(deleteServerMutation);
 
   return (
@@ -44,12 +46,14 @@ const UserProfile: React.FC = ({}) => {
               <Col className="d-flex justify-content-end mr-3">
                 <div>
                   <Link href="/server/new" passHref>
-                    <Button color="secondary">Create Server</Button>
+                    <Button color="accent" outline>
+                      Create Server
+                    </Button>
                   </Link>
                 </div>
               </Col>
             </Row>
-            {user?.servers?.map((server: any) => (
+            {servers.map((server: any, index: number) => (
               <Card className="bg-darker my-1 p-1" key={server.id}>
                 <Row className="mx-1 align-items-center">
                   <Col xs={1} className="mr-2">
@@ -69,48 +73,24 @@ const UserProfile: React.FC = ({}) => {
                     </Col>
                     <Col>{server.serverName}</Col>
                   </Col>
-                  <Col xs={4}>
-                    <Col>
-                      <small className="font-weight-bold text-accent">
-                        IP Address:
-                      </small>
-                    </Col>
-                    <Col>{server?.ipAddress || "No Address"}</Col>
-                  </Col>
-                  <Col xs={2} className="">
-                    <Col className="ml-1 mb-1">
-                      <small className="font-weight-bold text-accent">
-                        Status:
-                      </small>
-                    </Col>
-                    <Col>
-                      <ReactSwitch
-                        key={server.id}
-                        onChange={() => {}}
-                        checked={server.status}
-                        className="font-size-sm"
-                        checkedIcon={false}
-                        uncheckedIcon={false}
-                        height={18}
-                        width={48}
+                  <Col xs={4} className="p-0 clickable">
+                    <Link href={`/server/view/${server.id}`} passHref>
+                      <Image
+                        src={server?.bannerURL}
+                        width={468}
+                        height={60}
+                        alt="banner img"
                       />
-                    </Col>
-                  </Col>
-                  <Col>
-                    <Col>
-                      <small className="font-weight-bold text-accent">
-                        Slot:
-                      </small>
-                    </Col>
-                    <Col>{server.listSlot || "Not Listed"}</Col>
+                    </Link>
                   </Col>
                   <Col>
                     <Button
                       outline
                       color="danger"
-                      onClick={() =>
-                        deleteServer({ variables: { id: server.id } })
-                      }
+                      onClick={() => {
+                        deleteServer({ variables: { id: server.id } });
+                        // user?.servers?.splice(index, 1);
+                      }}
                     >
                       Delete
                     </Button>

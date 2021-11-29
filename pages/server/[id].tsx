@@ -18,11 +18,6 @@ import { useUser, useServer, useTags, useNotification } from "@/hooks";
 import Dropzone from "react-dropzone";
 import { supabase } from "utils/supabaseClient";
 
-const gameIDList = [
-  { label: "Minecraft", value: "Minecraft" },
-  // { label: "HyTale", value: "hyTale" },
-];
-
 const ServerDetails: React.FC = ({}) => {
   const history = useRouter();
   const { asPath } = useRouter();
@@ -49,10 +44,6 @@ const ServerDetails: React.FC = ({}) => {
       notification("GraphQL Error:" + error, "error");
     },
   });
-
-  const { publicURL, error: urlError } = supabase.storage
-    .from("dev")
-    .getPublicUrl(`banners/testBanner.gif`);
 
   if (!isNew && !server && loading) return null;
   return (
