@@ -16,8 +16,6 @@ const Auth: React.FC = () => {
     <Formik
       initialValues={{ email: "", password: "", firstName: "", lastName: "" }}
       validationSchema={Yup.object().shape({
-        // firstName: Yup.string().required("Required"),
-        // lastName: Yup.string().required("Required"),
         email: Yup.string().email("Invalid email").required("Required"),
         password: Yup.string()
           .min(8, "Must be at least 8 characters.")
@@ -31,7 +29,6 @@ const Auth: React.FC = () => {
             firstName: values.firstName,
             lastName: values.lastName,
           });
-          history.push(`/profile/${user.id}`);
         }
         if (!newUser) {
           await signIn({

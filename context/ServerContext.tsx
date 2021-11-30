@@ -8,7 +8,7 @@ interface Server {
   status: string;
   ipAddress: string;
   bannerURL: string;
-  gameID: string;
+
   listSlot: string;
 }
 
@@ -27,7 +27,7 @@ export const ServerContext = createContext<{
     status: "",
     ipAddress: "",
     bannerURL: "",
-    gameID: "",
+
     listSlot: "",
   },
 });
@@ -44,7 +44,6 @@ const ServerProvider: React.FC<ServerContextProps> = ({
     status: "",
     ipAddress: "",
     bannerURL: "",
-    gameID: "",
     listSlot: "",
   });
 

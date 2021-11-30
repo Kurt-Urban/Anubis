@@ -11,6 +11,7 @@ interface SelectProps {
   className?: string;
   creatable?: boolean;
   disabled?: boolean;
+  placeholder?: string;
 }
 
 interface Option {
@@ -25,6 +26,7 @@ const SelectField: React.FC<SelectProps> = ({
   className,
   creatable,
   disabled,
+  placeholder,
 }) => {
   const { setFieldValue, values } = useFormikContext();
 
@@ -49,6 +51,7 @@ const SelectField: React.FC<SelectProps> = ({
       isMulti={isMulti}
       defaultValue={defaultValue}
       isClearable
+      placeholder={placeholder}
     />
   ) : (
     <Select
@@ -59,6 +62,7 @@ const SelectField: React.FC<SelectProps> = ({
       isClearable={isMulti}
       defaultValue={defaultValue}
       isDisabled={disabled}
+      placeholder={placeholder}
     />
   );
 };

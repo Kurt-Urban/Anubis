@@ -12,9 +12,9 @@ const UserFragment = gql`
       status
       bannerURL
       listSlot
-      gameID
     }
     email
+    role
   }
 `;
 
