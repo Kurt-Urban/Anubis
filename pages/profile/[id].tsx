@@ -76,10 +76,10 @@ const UserProfile: React.FC = ({}) => {
                   <Col xs={4} className="p-0 clickable">
                     <Link href={`/server/view/${server.id}`} passHref>
                       <Image
-                        src={server?.bannerURL}
-                        width={468}
-                        height={60}
-                        alt="banner img"
+                        src={server?.bannerURL || "/placeholderBanner.png"}
+                        alt="banner"
+                        height="60"
+                        width="468"
                       />
                     </Link>
                   </Col>

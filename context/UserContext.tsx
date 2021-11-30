@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { createUserMutation } from "@/mutations";
 import { getUserQuery } from "@/queries";
 import { supabase } from "utils/supabaseClient";
+import { useRouter } from "next/router";
 
 interface User {
   id: string;
@@ -10,6 +11,7 @@ interface User {
   firstName: string;
   lastName: string;
   email: string;
+  role: string;
 }
 
 export const UserContext = createContext<{
@@ -23,6 +25,7 @@ export const UserContext = createContext<{
     firstName: "",
     lastName: "",
     email: "",
+    role: "",
   },
   signUp: () => {},
   signIn: () => {},
@@ -35,8 +38,10 @@ const UserProvider: React.FC = ({ children }) => {
     firstName: "",
     lastName: "",
     email: "",
+    role: "",
   });
 
+  const history = useRouter();
   const supaUser = supabase.auth.user();
 
   const { data: userData } = useQuery(getUserQuery, {
@@ -51,15 +56,6 @@ const UserProvider: React.FC = ({ children }) => {
       onError: () => console.log("Failed to create user"),
     }
   );
-
-  useEffect(() => {
-    if (userData) {
-      setUser(userData?.getUser);
-    }
-    if (createUserData) {
-      setUser(createUserData?.createUser);
-    }
-  }, [userData, createUserData]);
 
   const signUp = async (input: any) => {
     try {
@@ -76,6 +72,7 @@ const UserProvider: React.FC = ({ children }) => {
             firstName: input.firstName,
             lastName: input.lastName,
             email,
+            role: "user",
           },
         },
       });
@@ -95,7 +92,15 @@ const UserProvider: React.FC = ({ children }) => {
     }
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (userData) {
+      setUser(userData?.getUser);
+    }
+    if (createUserData) {
+      setUser(createUserData?.createUser);
+      history.push(`/profile/${createUserData?.createUser?.id}`);
+    }
+  }, [userData, createUserData]);
 
   return (
     <UserContext.Provider

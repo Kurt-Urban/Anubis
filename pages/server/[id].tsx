@@ -91,7 +91,6 @@ const ServerDetails: React.FC = ({}) => {
                   serverName: values.serverName,
                   ipAddress: values.ipAddress,
                   bannerURL: publicURL || "",
-                  gameID: "Minecraft",
                 },
                 tags: values.tags,
               },
@@ -103,7 +102,6 @@ const ServerDetails: React.FC = ({}) => {
                   serverName: values.serverName,
                   ipAddress: values.ipAddress,
                   bannerURL: publicURL || server.bannerURL,
-                  gameID: "Minecraft",
                 },
                 tags: values.tags,
                 id: serverID,
@@ -137,42 +135,62 @@ const ServerDetails: React.FC = ({}) => {
               <Row className="mx-2 mt-2">
                 <Col>
                   <Card className="bg-800 border-700 shadow">
-                    <CardHeader className="bg-darkest d-flex justify-content-center h5">
+                    <CardHeader className="bg-600 d-flex justify-content-center h5">
                       General Information
                     </CardHeader>
                     <CardBody>
                       <Row>
-                        <Col xs={6}>
+                        <Col xs={4}>
                           <div>Server Name</div>
                           <Field
                             name="serverName"
-                            className="bg-white form-control mt-1"
+                            className="form-control mt-1"
                             placeholder="Server Name..."
                           />
                         </Col>
                         <Col xs={6}>
-                          <div>IP Address</div>
+                          <div>Server Host</div>
                           <Field
                             name="ipAddress"
-                            className="bg-white form-control mt-1"
-                            placeholder="IP Address..."
+                            className="form-control mt-1"
+                            placeholder="Only enter Host/IP..."
+                          />
+                        </Col>
+                        <Col xs={2}>
+                          <div>Server Port</div>
+                          <Field
+                            name="port"
+                            className="form-control mt-1"
+                            placeholder="Port..."
                           />
                         </Col>
                       </Row>
-                      <Row>
-                        <Col xs={12} className="mt-2">
+                      <Row className="mt-2">
+                        <Col xs={12}>
+                          <div>Description</div>
+                          <Field
+                            as="textarea"
+                            name="description"
+                            type="textarea"
+                            className="form-control mt-1"
+                            placeholder="Enter description..."
+                          />
+                        </Col>
+                      </Row>
+                      <Row className="mt-2">
+                        <Col xs={12}>
                           <div>Banner URL</div>
                           <Field
                             name="bannerURL"
                             className="bg-light form-control mt-1"
-                            placeholder="Banner URL..."
+                            placeholder="URL generated on upload..."
                             disabled
                           />
                         </Col>
                         <Col xs={12} className="text-center mt-4">
                           <Image
                             src={server?.bannerURL || "/placeholderBanner.png"}
-                            alt="banner img"
+                            alt="banner"
                             height="60"
                             width="468"
                           />
@@ -206,16 +224,44 @@ const ServerDetails: React.FC = ({}) => {
                 <Col>
                   <Card className="bg-800 border-700 shadow">
                     <CardHeader className="bg-600 d-flex justify-content-center h5">
-                      Tags
+                      Optional Information
                     </CardHeader>
                     <CardBody>
                       <Row className="mt-2">
+                        <Col xs={4}>
+                          <div>Website</div>
+                          <Field
+                            name="websiteURL"
+                            className="form-control mt-1"
+                            placeholder="Link to Website..."
+                          />
+                        </Col>
+                        <Col xs={4}>
+                          <div>Discord</div>
+                          <Field
+                            name="discordURL"
+                            className="form-control mt-1"
+                            placeholder="Discord invite link..."
+                          />
+                        </Col>
+                        <Col xs={4}>
+                          <div>Youtube Server Video</div>
+                          <Field
+                            name="trailerURL"
+                            className="form-control mt-1"
+                            placeholder="Youtube link..."
+                          />
+                        </Col>
+                      </Row>
+                      <Row className="mt-2">
                         <Col xs={12}>
+                          <div>Server Tags</div>
                           <SelectField
                             name="tags"
                             className="mt-1"
                             isMulti
-                            creatable
+                            creatable={user?.role === "admin"}
+                            placeholder="Add up to 8 tags..."
                             options={[].concat(
                               tags?.map((t: any) => ({
                                 label: t.value,

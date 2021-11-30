@@ -8,7 +8,6 @@ const ServerFragment = gql`
     status
     bannerURL
     listSlot
-    gameID
     tags {
       tag {
         value

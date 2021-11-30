@@ -8,7 +8,6 @@ const CreateServerModal: React.FC = ({}) => {
       <Formik
         initialValues={{
           bannerURL: "",
-          gameID: "",
           ipAddress: "",
           serverName: "",
         }}
