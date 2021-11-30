@@ -51,38 +51,61 @@ const ServerDetails: React.FC = ({}) => {
       initialValues={
         isNew
           ? {
+              banner: null,
               serverName: "",
               ipAddress: "",
+              description: "",
               bannerURL: "",
+              trailerURL: "",
+              websiteURL: "",
+              discordURL: "",
+              gameVersion: "",
+              country: "",
+              port: 25565,
+              playerLikes: 0,
               tags: [],
-              banner: null,
             }
           : {
-              serverName: server?.serverName,
+              banner: server?.bannerURL || null,
+              serverName: server?.serverName || "",
               ipAddress: server?.ipAddress || "",
               bannerURL: server?.bannerURL || "",
-              banner: server?.banner || null,
+              description: server?.description || "",
+              trailerURL: server?.trailerURL || "",
+              websiteURL: server?.websiteURL || "",
+              discordURL: server?.discordURL || "",
+              gameVersion: server?.gameVersion || "",
+              country: server?.country || "",
+              port: server?.port || 25565,
+              playerLikes: server?.playerLikes || 0,
               tags: server?.tags?.map((t: any) => t.tag.value) || [],
             }
       }
       onSubmit={async (values) => {
+        let publicURL = values.bannerURL;
         try {
-          const { error } = await supabase.storage
-            .from("dev")
-            .upload(`banners/${values.banner?.[0].path}`, values.banner?.[0], {
-              contentType: "image/gif",
-            });
-          if (error) {
-            notification(error.message, "error");
+          if (typeof values.banner === "object") {
+            const { error } = await supabase.storage
+              .from("dev")
+              .upload(
+                `banners/${values.banner?.[0].path}`,
+                values?.banner?.[0],
+                {
+                  contentType: "image/gif",
+                }
+              );
+            if (error) {
+              notification(error.message, "error");
+            }
+            const { publicURL: url, error: urlError } = await supabase.storage
+              .from("dev")
+              .getPublicUrl(`banners/${values.banner?.[0].path}`);
+            publicURL = url;
+            if (urlError) {
+              notification(urlError.message, "error");
+            }
+            console.log("ran");
           }
-          const { publicURL, error: urlError } = await supabase.storage
-            .from("dev")
-            .getPublicUrl(`banners/${values.banner?.[0].path}`);
-
-          if (urlError) {
-            notification(urlError.message, "error");
-          }
-
           if (isNew) {
             await createServer({
               variables: {
@@ -90,7 +113,15 @@ const ServerDetails: React.FC = ({}) => {
                   ownerID: user!.id,
                   serverName: values.serverName,
                   ipAddress: values.ipAddress,
-                  bannerURL: publicURL || "",
+                  bannerURL: publicURL,
+                  description: values.description,
+                  trailerURL: values.trailerURL,
+                  websiteURL: values.websiteURL,
+                  discordURL: values.discordURL,
+                  gameVersion: values.gameVersion,
+                  country: values.country,
+                  port: values.port,
+                  playerLikes: 0,
                 },
                 tags: values.tags,
               },
@@ -101,7 +132,15 @@ const ServerDetails: React.FC = ({}) => {
                 input: {
                   serverName: values.serverName,
                   ipAddress: values.ipAddress,
-                  bannerURL: publicURL || server.bannerURL,
+                  bannerURL: publicURL,
+                  description: values.description,
+                  trailerURL: values.trailerURL,
+                  websiteURL: values.websiteURL,
+                  discordURL: values.discordURL,
+                  gameVersion: values.gameVersion,
+                  country: values.country,
+                  port: values.port,
+                  playerLikes: values.playerLikes,
                 },
                 tags: values.tags,
                 id: serverID,
@@ -206,7 +245,7 @@ const ServerDetails: React.FC = ({}) => {
                                 <div {...getRootProps()}>
                                   <input {...getInputProps()} />
                                   <div>
-                                    {values.banner
+                                    {typeof values.banner === "object"
                                       ? values.banner?.[0].path
                                       : "Drag and drop banner .gif here or click to browse files."}
                                   </div>
