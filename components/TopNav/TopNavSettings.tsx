@@ -43,7 +43,13 @@ const TopNavSettings: React.FC = ({}) => {
               <Row>
                 <Col xs={12} className="d-flex justify-content-center mb-2">
                   <DropdownItem className="text-300 bg-transparent d-flex justify-content-center">
-                    <Link passHref href={`/profile/${user.id}`}>
+                    <Link
+                      passHref
+                      href={{
+                        pathname: "/profile/[userID]",
+                        query: { userID: user?.id },
+                      }}
+                    >
                       <div>Profile</div>
                     </Link>
                   </DropdownItem>
@@ -52,7 +58,13 @@ const TopNavSettings: React.FC = ({}) => {
               <Row>
                 <Col xs={12} className="d-flex justify-content-center mb-2">
                   <DropdownItem className="text-300 bg-transparent d-flex justify-content-center">
-                    <Link passHref href="/profile/favorites">
+                    <Link
+                      passHref
+                      href={{
+                        pathname: "/profile/[userID]/favorites",
+                        query: { userID: user?.id },
+                      }}
+                    >
                       <div>Favorites</div>
                     </Link>
                   </DropdownItem>
@@ -61,7 +73,13 @@ const TopNavSettings: React.FC = ({}) => {
               <Row>
                 <Col xs={12} className="d-flex justify-content-center mb-2">
                   <DropdownItem className="text-300 bg-transparent d-flex justify-content-center">
-                    <Link passHref href="/profile/servers">
+                    <Link
+                      passHref
+                      href={{
+                        pathname: "/profile/[userID]/servers",
+                        query: { userID: user?.id },
+                      }}
+                    >
                       <div>Servers</div>
                     </Link>
                   </DropdownItem>
@@ -89,7 +107,7 @@ const TopNavSettings: React.FC = ({}) => {
                 <small className="text-light">Please Sign In</small>
               </Col>
               <Col xs={12} className="d-flex justify-content-center mb-2">
-                <Link href="/login">
+                <Link href="/login" passHref>
                   <Button color="accent" outline>
                     Login
                   </Button>

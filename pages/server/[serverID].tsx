@@ -20,28 +20,32 @@ import { supabase } from "utils/supabaseClient";
 
 const ServerDetails: React.FC = ({}) => {
   const history = useRouter();
-  const { asPath } = useRouter();
-  const isNew = asPath.includes("new");
-  const serverID = asPath.slice(8);
+  const { query } = useRouter();
+  const isNew = query?.serverID === "new";
   const { user } = useUser();
-  const { server, loading } = useServer(serverID);
+  const { server, loading } = useServer(query?.serverID);
   const { tags } = useTags();
   const { notification } = useNotification();
 
   const [createServer] = useMutation(createServerMutation, {
+    onCompleted: (data) => {
+      notification("success", "Server created");
+      history.push(`/server/${data.createServer.id}`);
+    },
     onError: (error) => {
-      console.error("GraphQL Error:" + error);
-      notification("GraphQL Error:" + error, "error");
+      console.error("GraphQL Error: " + error);
+      notification("Error: " + error, "error");
     },
   });
 
   const [updateServer] = useMutation(updateServerMutation, {
-    onCompleted: () => {
+    onCompleted: (data) => {
       notification("Server updated successfully", "success");
+      history.push("/server/view/" + data.updateServer.id);
     },
     onError: (error) => {
-      console.error("GraphQL Error:" + error);
-      notification("GraphQL Error:" + error, "error");
+      console.error("GraphQL Error: " + error);
+      notification("Error: " + error, "error");
     },
   });
 

@@ -2,6 +2,7 @@ import gql from "graphql-tag";
 
 const ServerFragment = gql`
   fragment ServerFragment on Server {
+    __typename
     id
     serverName
     ownerID
