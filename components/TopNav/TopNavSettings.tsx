@@ -42,47 +42,47 @@ const TopNavSettings: React.FC = ({}) => {
               <hr className="bg-300" />
               <Row>
                 <Col xs={12} className="d-flex justify-content-center mb-2">
-                  <DropdownItem className="text-300 bg-transparent d-flex justify-content-center">
-                    <Link
-                      passHref
-                      href={{
-                        pathname: "/profile/[userID]",
-                        query: { userID: user?.id },
-                      }}
-                    >
-                      <div>Profile</div>
-                    </Link>
-                  </DropdownItem>
+                  <Link
+                    passHref
+                    href={{
+                      pathname: "/profile/[userID]",
+                      query: { userID: user?.id },
+                    }}
+                  >
+                    <DropdownItem className="text-300 bg-transparent d-flex justify-content-center">
+                      Profile
+                    </DropdownItem>
+                  </Link>
                 </Col>
               </Row>
               <Row>
                 <Col xs={12} className="d-flex justify-content-center mb-2">
-                  <DropdownItem className="text-300 bg-transparent d-flex justify-content-center">
-                    <Link
-                      passHref
-                      href={{
-                        pathname: "/profile/[userID]/favorites",
-                        query: { userID: user?.id },
-                      }}
-                    >
-                      <div>Favorites</div>
-                    </Link>
-                  </DropdownItem>
+                  <Link
+                    passHref
+                    href={{
+                      pathname: "/profile/[userID]/favorites",
+                      query: { userID: user?.id },
+                    }}
+                  >
+                    <DropdownItem className="text-300 bg-transparent d-flex justify-content-center">
+                      Favorites
+                    </DropdownItem>
+                  </Link>
                 </Col>
               </Row>
               <Row>
                 <Col xs={12} className="d-flex justify-content-center mb-2">
-                  <DropdownItem className="text-300 bg-transparent d-flex justify-content-center">
-                    <Link
-                      passHref
-                      href={{
-                        pathname: "/profile/[userID]/servers",
-                        query: { userID: user?.id },
-                      }}
-                    >
-                      <div>Servers</div>
-                    </Link>
-                  </DropdownItem>
+                  <Link
+                    passHref
+                    href={{
+                      pathname: "/profile/[userID]/servers",
+                      query: { userID: user?.id },
+                    }}
+                  >
+                    <DropdownItem className="text-300 bg-transparent d-flex justify-content-center">
+                      Servers
+                    </DropdownItem>
+                  </Link>
                 </Col>
               </Row>
               <hr className="bg-300" />

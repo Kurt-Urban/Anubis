@@ -38,7 +38,8 @@ const Auth: React.FC = () => {
           history.push("/");
         }
       }}
-      render={() => (
+    >
+      {() => (
         <Form className="page-container">
           <Container className="h-25 p-0 w-25 d-flex">
             <div className="mt-auto mb-1 h4 align-items-middle text-lighter">
@@ -113,7 +114,7 @@ const Auth: React.FC = () => {
           </Container>
         </Form>
       )}
-    ></Formik>
+    </Formik>
   );
 };
 

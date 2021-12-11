@@ -8,7 +8,6 @@ const ServerFragment = gql`
     ownerID
     ipAddress
     description
-    status
     bannerURL
     trailerURL
     websiteURL

@@ -21,9 +21,10 @@ import { supabase } from "utils/supabaseClient";
 const ServerDetails: React.FC = ({}) => {
   const history = useRouter();
   const { query } = useRouter();
-  const isNew = query?.serverID === "new";
+  const serverID = query?.serverID;
+  const isNew = serverID === "new";
   const { user } = useUser();
-  const { server, loading } = useServer(query?.serverID);
+  const { server, loading } = useServer(serverID);
   const { tags } = useTags();
   const { notification } = useNotification();
 
